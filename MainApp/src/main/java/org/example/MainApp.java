@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
-public class Main {
+public class MainApp {
 
     public static void main(String[] args) throws SQLException {
         String url = "jdbc:mariadb://localhost:3306/jdbc?user=root&password=temp&maxPoolSize=5";
