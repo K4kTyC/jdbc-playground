@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.model.TestEntity;
+import org.example.model.SimpleEntity;
 import org.example.repository.TestRepository;
 import org.mariadb.jdbc.MariaDbPoolDataSource;
 
@@ -8,58 +8,41 @@ import java.util.List;
 
 public class TestService {
 
-    private final TestRepository repository;
+    private final TestRepository testRepository;
 
     public TestService(MariaDbPoolDataSource dataSource) {
-        this.repository = new TestRepository(dataSource);
+        testRepository = new TestRepository(dataSource);
     }
 
 
     public void poolTest() {
-        repository.poolTest();
+        testRepository.poolTest();
     }
 
-    public List<TestEntity> getAll() {
-        return repository.getAll();
+    public void isolationTestInit() {
+        SimpleEntity e1 = new SimpleEntity();
+        e1.setColumnString("e1text");
+        SimpleEntity e2 = new SimpleEntity();
+        e2.setColumnString("e2text");
+
+        testRepository.isolationTestClearTable();
+        testRepository.isolationTestCreateEntities(List.of(e1, e2));
     }
 
-    public TestEntity getById(Long id) {
-        return repository.getById(id);
+    public void isolationTestTransaction1(Integer isolationLevel) {
+        testRepository.isolationTestTransaction1(isolationLevel);
     }
 
-    public void save(TestEntity entity) {
-        if (entity != null) {
-            repository.save(entity);
-        }
-    }
+    public void isolationTestTransaction2() {
+        SimpleEntity e1 = new SimpleEntity();
+        e1.setId(1);
+        e1.setColumnString("e1text_new");
+        SimpleEntity e2 = new SimpleEntity();
+        e2.setId(2);
+        e2.setColumnString("e2text_new");
+        SimpleEntity e3 = new SimpleEntity();
+        e3.setColumnString("e3text");
 
-    public void bulkSave(List<TestEntity> entities, Boolean eachInSingleTransaction) {
-        if (eachInSingleTransaction) {
-            repository.bulkSaveEachInSingleTransaction(entities);
-        } else {
-            repository.bulkSave(entities);
-        }
-    }
-
-    public void update(TestEntity entity) {
-        if (entity != null && entity.getId() != null) {
-            repository.update(entity);
-        }
-    }
-
-    public void bulkUpdate(List<TestEntity> entities, Boolean eachInSingleTransaction) {
-        if (eachInSingleTransaction) {
-            repository.bulkUpdateEachInSingleTransaction(entities);
-        } else {
-            repository.bulkUpdate(entities);
-        }
-    }
-
-    public void deleteAll() {
-        repository.deleteAll();
-    }
-
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+        testRepository.isolationTestTransaction2(List.of(e1, e2), e3);
     }
 }

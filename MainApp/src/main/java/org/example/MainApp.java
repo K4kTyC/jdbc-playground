@@ -1,7 +1,7 @@
 package org.example;
 
 import io.javalin.Javalin;
-import org.example.controller.TestController;
+import org.example.controller.Controller;
 import org.mariadb.jdbc.MariaDbPoolDataSource;
 
 import java.sql.SQLException;
@@ -14,12 +14,15 @@ public class MainApp {
         String url = "jdbc:mariadb://localhost:3306/jdbc?user=root&password=temp&maxPoolSize=5";
         MariaDbPoolDataSource dataSource = new MariaDbPoolDataSource(url);
 
-        TestController controller = new TestController(dataSource);
+        Controller controller = new Controller(dataSource);
 
         Javalin.create()
                 .routes(() -> {
                     path("/test", () -> {
                         get("/pool", controller::poolTest);
+                        get("/isolation/init", controller::isolationTestInit);
+                        get("/isolation/transaction1", controller::isolationTestTransaction1);
+                        get("/isolation/transaction2", controller::isolationTestTransaction2);
                     });
 
                     path("/entities", () -> {

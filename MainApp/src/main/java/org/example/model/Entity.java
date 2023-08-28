@@ -1,16 +1,16 @@
 package org.example.model;
 
-import org.example.enums.TestEnum;
+import org.example.enums.EnumForEntity;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-public class TestEntity {
+public class Entity {
 
     private Long id;
     private Boolean columnBool;
     private String columnString;
-    private TestEnum columnEnum;
+    private EnumForEntity columnEnum;
     private Double columnDouble;
     private Instant columnTimestamp;
     private LocalDateTime columnDatetime;
@@ -40,11 +40,11 @@ public class TestEntity {
         this.columnString = columnString;
     }
 
-    public TestEnum getColumnEnum() {
+    public EnumForEntity getColumnEnum() {
         return columnEnum;
     }
 
-    public void setColumnEnum(TestEnum columnEnum) {
+    public void setColumnEnum(EnumForEntity columnEnum) {
         this.columnEnum = columnEnum;
     }
 
